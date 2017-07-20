@@ -7,6 +7,8 @@ notes :
  - If you put all your source files in a src directory you can compile using Babel (to remove flow annotation and ES6 problem compatibilities) them to another directory by running (here I compile them to the /lib directory):
     `npm run build`
 
- - notes to run the app
-    1.`npm install`
-    2.`npm start`
+ - Commands to run the app
+ 
+   *`npm install`
+ 
+   *`npm start`
