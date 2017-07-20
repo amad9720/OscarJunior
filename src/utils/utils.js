@@ -1,15 +1,16 @@
 'use strict'
+// @flow
 
 const {Wit} = require('node-wit')
 const {WIT_TOKEN} = require('../config')
 const {fetchWeather} = require('./weather')
 
-function mapObject (obj, f) {
+function mapObject (obj /* : Object */, f /* : Function */) {
   return Object
     .keys(obj)
     .map(k => [k, f(obj[k], k)])
     .reduce(
-      (newObj, [k, v]) => {
+      (newObj /* : Object */, [k, v] /* : Array */) /* : Object */ => {
         newObj[k] = v
         return newObj
       },
@@ -17,12 +18,12 @@ function mapObject (obj, f) {
     )
 }
 
-const nothing = () => {}
+const nothing = () /* : Object */ => {}
 
-function wrapActions (actions, cbFunc) {
+function wrapActions (actions /* : Array */, cbFunc /* : Function */) /* : Object */ {
   return mapObject(
     actions,
-    (f, k) => function () {
+    (f, k) /* : Function */ => function () {
       const args = [].slice.call(arguments)
       cbFunc({name: k, args})
       return f.apply(null, arguments)
@@ -30,37 +31,37 @@ function wrapActions (actions, cbFunc) {
   )
 }
 
-function resetContext ({context}) {
+function resetContext ({context} /* : Object */) /* : Object */ {
   delete context.forecast
   delete context.location
   return context
 }
 
-const actions = {
-  send (request, response) {
-    console.log('sending...', JSON.stringify(response))
+const actions /* : Object */ = {
+  send (request /* : Object */, response /* : Object */) {
+    console.log(`Oscar : ${response.text}`)
     return Promise.resolve()
   },
   fetchWeather,
   resetContext,
-  'null': ({sessionId, context, text, entities}) => {
+  'null': ({sessionId, context /* : Object */, text, entities} /* : Object */) => {
     return Promise.resolve()
   }
 }
 
-function weatherBot (accessToken, cbFunc) {
+function weatherBot (accessToken /* : Object */, cbFunc /* : Function */) /* : Object */ {
   return new Wit({
     accessToken: WIT_TOKEN,
     actions: wrapActions(actions, cbFunc || nothing)
   })
 }
 
-const client = new Wit({
+const client /* : Object */ = new Wit({
   accessToken: WIT_TOKEN,
   actions: wrapActions(actions, nothing)
 })
 
-module.exports = {
+module.exports /* : Object */ = {
   weatherBot,
   client
 }

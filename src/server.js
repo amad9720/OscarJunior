@@ -1,4 +1,5 @@
 'use strict'
+// @flow
 
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
@@ -8,18 +9,18 @@ const express = require('express')
 const {WIT_TOKEN, SERVER_PORT} = require('./config')
 const {weatherBot, client} = require('./utils/utils')
 
-let interactive = null
-const _store = {}
+const _store /* : Object */ = {}
 
-function getContext (sessionId) {
+function getContext (sessionId /* : String */) /* : Object */ {
   return _store[sessionId] || {}
 }
 
-function setContext (sessionId, ctx) {
+function setContext (sessionId /* : String */, ctx /* : Object */) /* : null */ {
   _store[sessionId] = ctx
+  return null
 }
 
-interactive = require('node-wit').interactive
+const {interactive} /* : Object */ = require('node-wit')
 
 const app = express()
 // Usage of middleware for Express app routers
@@ -29,14 +30,14 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 
 // Some header Configs
-app.use((req, res, next) => {
+app.use((req /* : Object */, res /* : Object */, next /* : Function */) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Authorization', `Bearer ${WIT_TOKEN}`)
   next()
 })
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err /* : Object */, req /* : Object */, res /* : Object */, next /* : Function */) => {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
@@ -47,11 +48,11 @@ app.use((err, req, res, next) => {
 })
 
 // App routers
-app.get('/chat', (req, res) => {
+app.get('/chat', (req /* : Object */, res /* : Object */) => {
   const actions = []
-  const cb = (action) => actions.push(action)
-  const {text, sessionId} = req.query
-  const engine = weatherBot(WIT_TOKEN, cb)
+  const cb /* : Function */ = (action /* : Object */) => actions.push(action)
+  const {text, sessionId} /* : Object */ = req.query
+  const engine /* : Object */ = weatherBot(WIT_TOKEN, cb)
   engine.runActions(
     sessionId,
     text,

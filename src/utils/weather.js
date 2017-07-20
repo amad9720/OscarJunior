@@ -1,8 +1,10 @@
+// @flow
+
 const fetch = require('isomorphic-fetch')
 const {APPID} = require('../config')
 
-const checkEntityValue = (entities, entity) => {
-  const val = entities && entities[entity] &&
+const checkEntityValue /* : Function */ = (entities /* : Object */, entity /* : String */) => {
+  const val /* : Boolean */ = entities && entities[entity] &&
     Array.isArray(entities[entity]) &&
     entities[entity].length > 0 &&
     entities[entity][0].value
@@ -13,7 +15,7 @@ const checkEntityValue = (entities, entity) => {
   return typeof val === 'object' ? val.value : val
 }
 
-function forecastFor (weatherApiRes, location, dateTime) {
+function forecastFor (weatherApiRes /* : Object */, location /* : String */, dateTime /* : String */) {
   var forecast = ''
   if (weatherApiRes.error) {
     return weatherApiRes.error.message
@@ -22,11 +24,11 @@ function forecastFor (weatherApiRes, location, dateTime) {
     for (let i = weatherApiRes.forecast.forecastday.length - 1; i >= 0; i--) {
       if (weatherApiRes.forecast.forecastday[i].date === dateTime) {
         const dayForecast = weatherApiRes.forecast.forecastday[i]
-        forecast = dayForecast.day.avgtemp_c + '°C' + ', ' + dayForecast.day.condition.text + ' in ' + locationFor(weatherApiRes)
+        forecast = `${dayForecast.day.avgtemp_c} °C  , ${dayForecast.day.condition.text} in ${locationFor(weatherApiRes)} to this date ${dateTime}`
         break
       }
     }
-  } else forecast = weatherApiRes.current.temp_c + '°C' + ', ' + weatherApiRes.current.condition.text + ' in ' + locationFor(weatherApiRes)
+  } else forecast = `${weatherApiRes.current.temp_c} °C , ${weatherApiRes.current.condition.text} in ${locationFor(weatherApiRes)}`
 
   if (forecast === '') {
     forecast = 'not available for given date.'
@@ -34,44 +36,44 @@ function forecastFor (weatherApiRes, location, dateTime) {
   return forecast
 }
 
-const withForecast = (contxt, forecast) => {
+const withForecast = (contxt /* : Object */, forecast /* : String */) => {
   contxt.forecast = forecast
   return contxt
 }
 
-function locationFor (weatherApiRes) {
+function locationFor (weatherApiRes /* : Object */) {
   if (weatherApiRes.error) {
     return ''
   }
   return weatherApiRes.location.name
 }
 
-const withLocation = (contxt, loc) => {
+const withLocation /* : Function */ = (contxt /* : Object */, loc /* : String */) /* : Object */ => {
   contxt.location = loc
   delete contxt.missingLocation
   return contxt
 }
 
-const noLocation = (contxt) => {
+const noLocation /* : Function */ = (contxt /* : Object */) /* : Object */ => {
   contxt.missingLocation = true
   delete contxt.forecast
   return contxt
 }
 
-const withAPIError = (contxt, err) => {
+const withAPIError /* : Function */ = (contxt /* : Object */, err /* : Object */) /* : Object */ => {
   contxt.forecast = 'Weather data not available'
   return contxt
 }
 
-function fetchWeather ({context, entities}) {
+function fetchWeather ({context, entities}) /* : Function */ {
   // console.log(entities)
-  const location = checkEntityValue(entities, 'location')
+  const location /* : string */ = checkEntityValue(entities, 'location')
   if (!location) return Promise.resolve(noLocation(context))
 
-  let dateTime = checkEntityValue(entities, 'datetime')
+  let dateTime /* : String */ = checkEntityValue(entities, 'datetime')
 
   dateTime = dateTime ? dateTime.substring(0, 10) : null
-  const isDatePresent = dateTime ? true : false
+  const isDatePresent /* : Boolean */ = Boolean(dateTime)
 
   return getWeatherFromAPI(location, isDatePresent).then(
       res => {
@@ -84,14 +86,14 @@ function fetchWeather ({context, entities}) {
     )
 }
 
-function getWeatherFromAPI (location, isDatePresent) {
-  const days = isDatePresent ? 10 : 0
+function getWeatherFromAPI (location /* : String */, isDatePresent /* : Boolean */) {
+  const days /* : Number */ = isDatePresent ? 10 : 0
 
   return fetch(
-    'http://api.apixu.com/v1/forecast.json?' + `key=${APPID}&q=${location}&days=${days}`
+    `http://api.apixu.com/v1/forecast.json?key=${APPID}&q=${location}&days=${days}`
   ).then(res => res.json())
 }
 
-module.exports = {
+module.exports /* : Object */ = {
   fetchWeather
 }
