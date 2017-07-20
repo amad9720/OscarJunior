@@ -7,7 +7,9 @@
     "build": "babel src/ -d lib/",
     "prepublish": "npm run build",
     "flow": "flow",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
+    "test-watch": "nodemon --exec \"npm test\""
   },
   "author": "amad9720",
   "license": "ISC",
@@ -25,6 +27,7 @@
     "express": "^4.15.3",
     "isomorphic-fetch": "^2.2.1",
     "morgan": "^1.8.2",
-    "node-wit": "^4.2.0"
+    "node-wit": "^4.2.0",
+    "nodemon": "^1.11.0"
   }
 }
