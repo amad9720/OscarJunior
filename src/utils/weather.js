@@ -61,12 +61,11 @@ const noLocation /* : Function */ = (contxt /* : Object */) /* : Object */ => {
 }
 
 const withAPIError /* : Function */ = (contxt /* : Object */, err /* : Object */) /* : Object */ => {
-  contxt.forecast = 'Weather data not available'
+  contxt.forecast = `Weather data not available error ${err.toString()}`
   return contxt
 }
 
 function fetchWeather ({context, entities} /* : Object */) /* : Promise<*> */ {
-  // console.log(entities)
   const location /* : ?string */ = checkEntityValue(entities, 'location')
   if (!location) return Promise.resolve(noLocation(context))
 
@@ -95,5 +94,13 @@ function getWeatherFromAPI (location /* : string */, isDatePresent /* : any */) 
 }
 
 module.exports = {
-  fetchWeather
+  fetchWeather,
+  checkEntityValue,
+  forecastFor,
+  withForecast,
+  locationFor,
+  withLocation,
+  noLocation,
+  withAPIError,
+  getWeatherFromAPI
 }
