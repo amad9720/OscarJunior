@@ -18,9 +18,11 @@ For all the following npm scripts, refer to the `package.json` file
 
    `npm run coverage` (for running the code coverage with istanbul)
 
-> =============================== Coverage summary ===============================
->Statements   : 92.93% ( 92/99 )
->Branches     : 66.67% ( 18/27 )
->Functions    : 100% ( 5/5 )
->Lines        : 93.88% ( 92/98 )
->================================================================================
+```
+ =============================== Coverage summary ===============================
+ Statements   : 92.93% ( 92/99 )
+ Branches     : 66.67% ( 18/27 )
+ Functions    : 100% ( 5/5 )
+ Lines        : 93.88% ( 92/98 )
+ ================================================================================
+```
