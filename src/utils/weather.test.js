@@ -114,5 +114,4 @@ describe('Functions for forcast to API', () => {
       expect(context).toBeA('object').toIncludeKeys(['location', 'forecast'])
     })
   })
-
 })
