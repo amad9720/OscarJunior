@@ -68,7 +68,6 @@ const withAPIError /* : Function */ = (contxt /* : Object */, err /* : Object */
 function fetchWeather ({context, entities} /* : Object */) /* : Promise<*> */ {
   // console.log(entities)
   const location /* : ?string */ = checkEntityValue(entities, 'location')
-  console.log(typeof location)
   if (!location) return Promise.resolve(noLocation(context))
 
   let dateTime /* : any */ = checkEntityValue(entities, 'datetime')
