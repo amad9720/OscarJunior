@@ -8,7 +8,8 @@
     "prepublish": "npm run build",
     "flow": "flow",
     "start": "node src/server.js",
-    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha src/**/*.test.js",
+    "coverage": "istanbul cover _mocha src/**/*.test.js",
     "test-watch": "nodemon --exec \"npm test\""
   },
   "author": "amad9720",
