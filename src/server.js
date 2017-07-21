@@ -37,14 +37,16 @@ app.use((req /* : Object */, res /* : Object */, next /* : Function */) => {
 })
 
 // error handler
-app.use((err /* : Object */, req /* : Object */, res /* : Object */, next /* : Function */) => {
+app.use((err /* : ?Error */, req /* : Object */, res /* : Object */, next /* : Function */) => {
   // set locals, only providing error in development
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
+  if (err) {
+    res.locals.message = err.message
+    res.locals.error = req.app.get('env') === 'development' ? err : {}
 
-  // render the error page
-  res.status(err.status || 500)
-  res.render('error')
+    // render the error page
+    res.status(err.status || 500)
+    res.render('error')
+  }
 })
 
 // App routers

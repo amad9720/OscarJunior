@@ -10,7 +10,7 @@ function mapObject (obj /* : Object */, f /* : Function */) {
     .keys(obj)
     .map(k => [k, f(obj[k], k)])
     .reduce(
-      (newObj /* : Object */, [k, v] /* : Array */) /* : Object */ => {
+      (newObj /* : Object */, [k, v] /* : any */) /* : Object */ => {
         newObj[k] = v
         return newObj
       },
@@ -18,9 +18,9 @@ function mapObject (obj /* : Object */, f /* : Function */) {
     )
 }
 
-const nothing = () /* : Object */ => {}
+const nothing = () /* : ?any */ => {}
 
-function wrapActions (actions /* : Array */, cbFunc /* : Function */) /* : Object */ {
+function wrapActions (actions /* : any */, cbFunc /* : Function */) /* : Object */ {
   return mapObject(
     actions,
     (f, k) /* : Function */ => function () {
@@ -49,7 +49,7 @@ const actions /* : Object */ = {
   }
 }
 
-function weatherBot (accessToken /* : Object */, cbFunc /* : Function */) /* : Object */ {
+function weatherBot (accessToken /* : string */, cbFunc /* : Function */) /* : Object */ {
   return new Wit({
     accessToken: WIT_TOKEN,
     actions: wrapActions(actions, cbFunc || nothing)
@@ -61,7 +61,7 @@ const client /* : Object */ = new Wit({
   actions: wrapActions(actions, nothing)
 })
 
-module.exports /* : Object */ = {
+module.exports = {
   weatherBot,
   client
 }
